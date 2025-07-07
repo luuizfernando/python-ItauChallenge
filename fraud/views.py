@@ -2,9 +2,9 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 import numpy as np
-from datetime import datetime
 import joblib
 import os
+from dateutil import parser
 
 model_path = os.path.join(os.getcwd(), 'model', 'fraud_model.pkl')
 model = joblib.load(model_path)
@@ -15,7 +15,7 @@ def analyze_fraud(request):
         try:
             data = json.loads(request.body)
             valor = float(data["valor"])
-            dataHora = datetime.fromisoformat(data["dataHora"])
+            dataHora = parser.parse(data["dataHora"])
 
             hour = dataHora.hour
             isLateNight = 1 if 0 <= hour <= 5 else 0
